@@ -3,8 +3,18 @@ import * as fs from "fs";
 import * as path from "path";
 import extract from "extract-zip";
 import archiver from "archiver";
+import cors from "cors";
 
 const app = express();
+
+app.use(cors({
+  origin: "http://localhost:5173", // Vite dev server
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false,
+}));
+
+// parse JSON
 app.use(express.json());
 
 const BASE_PATH = path.join(process.cwd(), "server/themes");
@@ -24,7 +34,7 @@ export async function zipTheme(themeDir, outputZip) {
   const output = fs.createWriteStream(outputZip);
   const archive = archiver('zip', { zlib: { level: 9 } });
 
-  return new Promise((resolve, reject) => { 
+  return new Promise((resolve, reject) => {
     output.on('close', resolve);
     archive.on('error', reject);
 
@@ -38,7 +48,7 @@ function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true });
 }
 
-function readJson(filePath) {   
+function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf-8"));
 }
 
@@ -115,14 +125,14 @@ async function updateThemeLocally({
 
 // ------------------- Express API -------------------
 app.post("/api/update-theme", async (req, res) => {
-  const { themeFilePath, jsonFilePath, sectionKey, field, newValue } = req.body;
-
-  if (!themeFilePath || !sectionKey || !field) {
+  const { filePath, jsonFilePath, sectionKey, field, newValue } = req.body;
+  return req
+  if (!filePath || !sectionKey || !field) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
-    const result = await updateThemeLocally({ themeFilePath, jsonFilePath, sectionKey, field, newValue });
+    const result = await updateThemeLocally({ themeFilePath: filePath, jsonFilePath, sectionKey, field, newValue });
     res.json({
       success: true,
       message: "Theme updated successfully",
