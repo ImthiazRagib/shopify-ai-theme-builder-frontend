@@ -28,8 +28,8 @@ const Preview = (props) => {
             <div className="max-w-6xl mx-auto bg-white shadow-md p-6 flex flex-col items-center transition-all">  {/*md:flex-row gap-8 md:gap-12  md:p-10 lg:p-12 */}
                 {/* HEADER */}
 
-                {/* LEFT - IMAGE */}
-                <div className="w-full md:w-1/2 flex justify-center">
+                {/* LEFT - IMAGE  md:w-1/2*/}
+                <div className="w-full mb-3 flex justify-center">
                     <img
                         src={image}
                         alt={title}
