@@ -19,6 +19,7 @@
     "extract-zip": "^2.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-simple-wysiwyg": "^3.4.1",
     "tailwindcss": "^4.1.17"
   },
   "devDependencies": {
